@@ -1,37 +1,61 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
+import axios from 'axios'
 
 const ViewAll = () => {
-    const [data,changedata]=useState(
-        [
-            {"name": "Aju","admnno": "101","rollno": 1},
-            {"name": "Akash","admnno": "102","rollno": 2},
-            {"name": "Ajun","admnno": "103","rollno": 3},
-        ]
-    )
+    const [data,changedata] = useState([])
+    const fetchdata = () => {
+        axios.get("http://localhost:8080/view").then(
+            (response) => {
+                changedata(response.data)
+            }
+        ).catch(
+            (error) => {
+                console.log(error.message)
+                alert("Error")
+            }
+        ).finally()
+    }
+    useEffect(() => { fetchdata() }, [])
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className="container">
                 <div className="row">
                     <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                         <div className="row g-3">
-                            {
-                            data.map(
-                                (value,index)=>{
-                                    return <div className="col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
-                                    <div class="card">
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMDUESMMn2MgF1PXj4S4Bus6acMZ13Yf78FQ&s" class="card-img-top" alt="..."></img>
-                                        <div class="card-body">
-                                            <h5 class="card-title">Name: {value.name}</h5>
-                                            <p class="card-text">Roll No: {value.rollno}</p>
-                                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                }
-                            )
-                            }
+                            <table className="table">
+                                  <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Admn No</th>
+                                        <th scope="col">Roll No</th>
+                                        <th scope="col">Parent Name</th>
+                                        <th scope="col">College Name</th>
+                                        <th scope="col">DOB</th>
+                                        <th scope="col">Email ID</th>
+                                        <th scope="col">Password</th>
+                                    </tr>
+                                </thead>
+                                    {
+                                        data.map(
+                                            (value,index) => {
+                                                return  <tbody>
+                                    <tr>
+                                        <td scope="row">{value.name}</td>
+                                        <td>{value.admnno}</td>
+                                        <td>{value.rollno}</td>
+                                        <td>{value.pname}</td>
+                                        <td>{value.cname}</td>
+                                        <td>{value.dob}</td>
+                                        <td>{value.email}</td>
+                                        <td>{value.password}</td>
+                                    </tr>
+                                </tbody>
+                                         }
+                                )
+                                        }
+                            </table>
                         </div>
                     </div>
                 </div>
